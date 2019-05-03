@@ -9,3 +9,7 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+aws-lambda-runtime-config.cmake
+aws-lambda-runtime-targets.cmake
+version.cpp
+out/
