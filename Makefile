@@ -17,3 +17,8 @@ make-aws-lambda:
 install-aws-lambda: make-aws-lambda
 	cd ${PROJ_ROOT}/build-aws-sdk && $(MAKE) install
 
+configure:
+	cd ${PROJ_ROOT}/build && \
+	cmake ${PROJ_ROOT}/bootstrap \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_PREFIX_PATH=${MAKE_INSTALL_PREFIX}
