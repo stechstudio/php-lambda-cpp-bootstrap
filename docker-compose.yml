@@ -15,8 +15,6 @@ services:
 
     container_name: devenv
 
-    command: /usr/bin/gdbserver --multi localhost:2000
-
     cap_add:
       - SYS_PTRACE
 
