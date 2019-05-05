@@ -3,6 +3,8 @@ LABEL authors="Bubba Hines <bubba@stechstudio.com>"
 LABEL vendor="Signature Tech Studio, Inc."
 LABEL home="https://github.com/stechstudio/php-lambda-cpp-bootstrap"
 
+RUN yum -y install gdb-gdbserver
+
 ### development user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
 RUN useradd -l -u 77777 -G sudo -md /home/develop -s /bin/zsh -p develop develop 
@@ -42,11 +44,14 @@ RUN sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel9k\/powerlevel9k"/g'
 
 RUN { echo && echo "PS1='\[\e]0;\u \w\a\]\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \\\$ '" ; } >> .bashrc
 
-RUN mkdir -p ${HOME}/src
+RUN mkdir -p ${HOME}/src/build/bin
 ### checks ###
 # no root-owned files in the home directory
 RUN notOwnedFile=$(find . \! -user develop -group develop -print -quit) \
     && { [ -z "$notOwnedFile" ] \
     || { echo "Error: not all files/dirs in $HOME are owned by 'develop' user & group"; exit 1; } }
+# for gdbserver
+EXPOSE 2000
 
-ENTRYPOINT ["/bin/zsh"]
+VOLUME ${BUILD_DIR}
+WORKDIR ${BUILD_DIR}
