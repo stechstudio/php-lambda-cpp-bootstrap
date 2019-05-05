@@ -1,10 +1,9 @@
 {
     "version": "2.0.0",
-    "tasks": [
-        {
+    "tasks": [{
             "label": "start dev env",
             "type": "shell",
-            "command": "docker-compose -f develop-compose.yml run --service-ports --name devenv dev-image bash",
+            "command": "docker-compose up",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -14,59 +13,25 @@
         {
             "label": "stop dev env",
             "type": "shell",
-            "command": "docker-compose -f develop-compose.yml down",
+            "command": "docker-compose -f docker-compose.yml down",
             "problemMatcher": []
         },
         {
-            "label": "cmake generate",
+            "label": "clean docker",
             "type": "shell",
-            "command": "docker exec -it devenv cmake .",
+            "command": "docker-compose kill && docker-compose down && docker network prune -f && docker volume prune -f",
             "problemMatcher": []
-        },
-        {
-            "label": "build",
-            "type": "shell",
-            "group": "build",
-            "command": "docker exec -it devenv make",
-            "problemMatcher": [
-                "$gcc"
-            ]
-        },
-        {
-            "label": "clean",
-            "type": "shell",
-            "command": "docker exec -it devenv make clean",
-            "problemMatcher": [
-                "$gcc"
-            ]
-        },
-        {
-            "label": "make package",
-            "type": "shell",
-            "command": "docker exec -it devenv make package"
         },
         {
             "label": "start-gdbserver",
             "type": "shell",
-            "command": "docker exec -d devenv  gdbserver :2000 build/bin/your_app",
+            "command": "docker exec -d devenv  gdbserver :2000 /home/develop/src/build/bin/bootstrap",
             "problemMatcher": []
         },
         {
             "label": "build develop image",
             "type": "shell",
-            "command": "docker build -f Dockerfile.develop -t your-company/your-project/develop .",
-            "problemMatcher": []
-        },
-        {
-            "label": "run app",
-            "type": "shell",
-            "command": "docker exec -d devenv  build/bin/your_app",
-            "problemMatcher": []
-        },
-        {
-            "label": "stop app",
-            "type": "shell",
-            "command": "docker exec -d devenv  pkill your_app",
+            "command": "docker build -f dev.Dockerfile -t stechstudio/php-lambda-cpp-bootstrap/develop .",
             "problemMatcher": []
         }
     ]
