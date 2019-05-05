@@ -1,0 +1,73 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "start dev env",
+            "type": "shell",
+            "command": "docker-compose -f develop-compose.yml run --service-ports --name devenv dev-image bash",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "stop dev env",
+            "type": "shell",
+            "command": "docker-compose -f develop-compose.yml down",
+            "problemMatcher": []
+        },
+        {
+            "label": "cmake generate",
+            "type": "shell",
+            "command": "docker exec -it devenv cmake .",
+            "problemMatcher": []
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "group": "build",
+            "command": "docker exec -it devenv make",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "docker exec -it devenv make clean",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "make package",
+            "type": "shell",
+            "command": "docker exec -it devenv make package"
+        },
+        {
+            "label": "start-gdbserver",
+            "type": "shell",
+            "command": "docker exec -d devenv  gdbserver :2000 build/bin/your_app",
+            "problemMatcher": []
+        },
+        {
+            "label": "build develop image",
+            "type": "shell",
+            "command": "docker build -f Dockerfile.develop -t your-company/your-project/develop .",
+            "problemMatcher": []
+        },
+        {
+            "label": "run app",
+            "type": "shell",
+            "command": "docker exec -d devenv  build/bin/your_app",
+            "problemMatcher": []
+        },
+        {
+            "label": "stop app",
+            "type": "shell",
+            "command": "docker exec -d devenv  pkill your_app",
+            "problemMatcher": []
+        }
+    ]
+}
